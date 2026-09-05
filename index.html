@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selamat Ulang Tahun Minji! 🎉</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+  body { margin: 0; font-family: 'Poppins'; background: linear-gradient(135deg, #ffcce0, #ffe4ec, #ffd6e8); text-align: center; padding: 20px; overflow: hidden; }
+  h1 { color: #d81b60; font-size: 32px; text-shadow: 0 2px 5px white; }
+  #kado { font-size: 150px; cursor: pointer; animation: goyang 1s infinite; display: inline-block; margin-top: 50px; user-select: none; }
+  @keyframes goyang { 0%,100% { transform: rotate(-10deg) scale(1) } 50% { transform: rotate(10deg) scale(1.1) } }
+  #kartu { display: none; }
+.card { background: white; border-radius: 30px; padding: 30px; max-width: 420px; margin: 30px auto; box-shadow: 0 10px 30px rgba(216,27,96,0.3); position: relative; z-index: 10; }
+.dino { font-size: 100px; animation: muncul 0.8s ease; }
+  @keyframes muncul { from { transform: scale(0) rotate(-360deg) } to { transform: scale(1) rotate(0) } }
+  button { background: #25D366; color: white; border: none; padding: 14px 25px; border-radius: 20px; font-size: 16px; cursor: pointer; margin-top: 15px; font-weight: bold; }
+.balon { position: absolute; font-size: 40px; animation: terbang 5s linear forwards; z-index: 1; pointer-events: none; }
+  @keyframes terbang { from { transform: translateY(100vh) rotate(0deg) } to { transform: translateY(-100vh) rotate(720deg) } }
+  #ucapan { min-height: 120px; line-height: 1.6; white-space: pre-line; }
+.cursor { border-right: 3px solid #d81b60; animation: blink 0.7s infinite; }
+  @keyframes blink { 50% { border-color: transparent } }
+.confetti { position: absolute; font-size: 20px; z-index: 999; pointer-events: none; animation: jatuh 3s linear forwards; }
+  @keyframes jatuh { from { transform: translateY(-10px) rotate(0deg); opacity: 1 } to { transform: translateY(100vh) rotate(720deg); opacity: 0 } }
+  #youtube { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; } /* sembunyiin banget */
+</style>
+</head>
+<body>
+
+<h1>Ada Kado Buat Minji! 🎁</h1>
+<div id="kado">🎁</div>
+
+<!-- GANTI ID YOUTUBE DI SINI. CONTOH INI LAGU HAPPY BIRTHDAY -->
+<iframe id="youtube" src="" frameborder="0" allow="autoplay"></iframe>
+
+<div id="kartu">
+  <div class="card">
+    <div class="dino">🦕🎈💖</div>
+    <h1>Happy 22nd Birthday!</h1>
+    <h2>Untuk: Minji Tercinta 💕</h2>
+    <p id="ucapan"><span class="cursor"></span></p>
+    <button id="btnShare" style="display:none" onclick="shareWA()">Kirim Ucapan Ini 🦴💌</button>
+  </div>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+let ID_LAGU = "2Vv-BfVoq4g"; // <-- GANTI INI AJA. Ini ID Happy Birthday
+
+let teksLengkap = `Selamat ulang tahun yang ke-22 Minji! 🥳
+
+Di umur baru ini semoga kamu makin bersinar,
+makin banyak rezeki, makin banyak tawa,
+dan semua mimpi kamu satu-satu jadi nyata ✨
+
+Makasih udah jadi Minji yang hebat dan inspiratif.
+Sukses terus yaa cantik! 💖
+
+Dari: [Riansaourrr🦖]`;
+
+let i = 0;
+let sudahBuka = false;
+
+document.getElementById('kado').onclick = function() {
+  if(sudahBuka) return;
+  sudahBuka = true;
+  bukaKado();
+};
+
+function bukaKado() {
+  document.getElementById('kado').style.display = 'none';
+  document.getElementById('kartu').style.display = 'block';
+  
+  // INI KUNCINYA: langsung set src youtube + autoplay pas klik
+  document.getElementById('youtube').src = `https://www.youtube.com/embed/${ID_LAGU}?autoplay=1&loop=1&playlist=${ID_LAGU}&controls=0`;
+  
+  bikinConfetti();
+  bikinBalon();
+  mulaiNgetik();
+}
+
+function mulaiNgetik() {
+  if(i < teksLengkap.length) {
+    document.getElementById('ucapan').innerHTML = teksLengkap.substring(0, i+1) + `<span class="cursor"></span>`;
+    i++;
+    setTimeout(mulaiNgetik, 45);
+  } else {
+    document.getElementById('ucapan').innerHTML = teksLengkap;
+    document.getElementById('btnShare').style.display = 'inline-block';
+  }
+}
+
+function bikinConfetti() {
+  for(let i=0; i<80; i++) {
+    setTimeout(()=>{
+      let conf = document.createElement('div');
+      conf.className = 'confetti';
+      conf.innerText = ['🎊','🎉','💖','🌸','✨','🦕'][Math.floor(Math.random()*6)];
+      conf.style.left = Math.random() * 100 + 'vw';
+      document.body.appendChild(conf);
+      setTimeout(()=>conf.remove(), 3000);
+    }, i * 25)
+  }
+}
+
+function bikinBalon() {
+  let interval = setInterval(()=>{
+    let balon = document.createElement('div');
+    balon.className = 'balon';
+    balon.innerText = ['🎈','🎀','💖','🦕','🌸'][Math.floor(Math.random()*5)];
+    balon.style.left = Math.random() * 100 + 'vw';
+    document.body.appendChild(balon);
+    setTimeout(()=>balon.remove(), 5000);
+  }, 250);
+  setTimeout(()=>clearInterval(interval), 10000);
+}
+
+function shareWA() {
+  let text = `Aku punya kado ultah spesial buat Minji 🥳🎁\nKlik link ini ya: [link website kamu]\n\nSemoga Minji suka 💖`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+</script>
+</body>
+</html>
